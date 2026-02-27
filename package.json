@@ -1,0 +1,31 @@
+{
+  "name": "@aauth/aauth",
+  "private": true,
+  "version": "0.1.1",
+  "description": "AAuth (Agent Auth) utilities and packages",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hellocoop/AAuth"
+  },
+  "keywords": [
+    "aauth",
+    "agent-auth",
+    "authentication",
+    "mcp"
+  ],
+  "author": "Dick Hardt <dick.hardt@hello.coop>",
+  "license": "MIT",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^3.0.0"
+  },
+  "workspaces": [
+    "local-keys",
+    "mcp-agent",
+    "mcp-server",
+    "mcp-stdio",
+    "mcp-openclaw"
+  ]
+}

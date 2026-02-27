@@ -1,0 +1,42 @@
+{
+  "name": "@aauth/mcp-agent",
+  "version": "0.1.1",
+  "description": "Authenticated MCP transport with HTTP Signatures for AAuth agents",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "aauth",
+    "agent-auth",
+    "mcp",
+    "http-signatures"
+  ],
+  "author": "Dick Hardt <dick.hardt@hello.coop>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hellocoop/AAuth",
+    "directory": "mcp-agent"
+  },
+  "dependencies": {
+    "@hellocoop/httpsig": "^1.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

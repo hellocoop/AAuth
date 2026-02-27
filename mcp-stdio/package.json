@@ -1,0 +1,48 @@
+{
+  "name": "@aauth/mcp-stdio",
+  "version": "0.1.1",
+  "description": "Stdio-to-HTTP proxy for MCP with AAuth signatures",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "aauth-mcp-stdio": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "aauth",
+    "agent-auth",
+    "mcp",
+    "stdio",
+    "proxy"
+  ],
+  "author": "Dick Hardt <dick.hardt@hello.coop>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hellocoop/AAuth",
+    "directory": "mcp-stdio"
+  },
+  "dependencies": {
+    "@aauth/mcp-agent": "^0.1.0",
+    "@aauth/local-keys": "^0.1.0",
+    "@modelcontextprotocol/sdk": "^1.15.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

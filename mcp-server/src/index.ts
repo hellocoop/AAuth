@@ -1,0 +1,7 @@
+export { buildAAuthHeader } from './aauth-header.js'
+export { InteractionManager } from './interaction.js'
+export { createResourceToken } from './resource-token.js'
+export { verifyToken, AAuthTokenError, clearMetadataCache } from './verify-token.js'
+export type { PendingRequest, InteractionManagerOptions } from './interaction.js'
+export type { ResourceTokenOptions, SignFn } from './resource-token.js'
+export type { VerifyTokenOptions, VerifiedAgentToken, VerifiedAuthToken, VerifiedToken } from './verify-token.js'

@@ -1,0 +1,81 @@
+import { Client } from '@modelcontextprotocol/sdk/client/index.js'
+import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js'
+import { createSignedFetch } from '@aauth/mcp-agent'
+import type { GetKeyMaterial } from '@aauth/mcp-agent'
+import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js'
+
+interface ManagedServer {
+  name: string
+  client: Client
+  transport: Transport
+  tools: Map<string, string> // prefixed name → original name
+}
+
+export interface ServerManagerOptions {
+  servers: Record<string, string> // name → url
+  getKeyMaterial: GetKeyMaterial
+}
+
+export class ServerManager {
+  private servers = new Map<string, ManagedServer>()
+
+  constructor(private options: ServerManagerOptions) {}
+
+  async connectAll(): Promise<void> {
+    const entries = Object.entries(this.options.servers)
+    await Promise.all(entries.map(([name, url]) => this.connect(name, url)))
+  }
+
+  private async connect(name: string, url: string): Promise<void> {
+    const signedFetch = createSignedFetch(this.options.getKeyMaterial)
+    const transport = new StreamableHTTPClientTransport(new URL(url), {
+      fetch: signedFetch,
+    })
+
+    const client = new Client({ name: `aauth-${name}`, version: '0.0.1' })
+    await client.connect(transport)
+
+    const { tools } = await client.listTools()
+    const toolMap = new Map<string, string>()
+    for (const tool of tools) {
+      toolMap.set(`${name}_${tool.name}`, tool.name)
+    }
+
+    this.servers.set(name, { name, client, transport, tools: toolMap })
+  }
+
+  getTools(): Array<{ prefixedName: string; serverName: string; originalName: string; description?: string }> {
+    const result: Array<{ prefixedName: string; serverName: string; originalName: string; description?: string }> = []
+    for (const [, server] of this.servers) {
+      for (const [prefixedName, originalName] of server.tools) {
+        result.push({
+          prefixedName,
+          serverName: server.name,
+          originalName,
+        })
+      }
+    }
+    return result
+  }
+
+  async callTool(
+    prefixedName: string,
+    args: Record<string, unknown>,
+  ): Promise<unknown> {
+    for (const [, server] of this.servers) {
+      const originalName = server.tools.get(prefixedName)
+      if (originalName) {
+        return server.client.callTool({ name: originalName, arguments: args })
+      }
+    }
+    throw new Error(`Unknown tool: ${prefixedName}`)
+  }
+
+  async shutdown(): Promise<void> {
+    const closers = Array.from(this.servers.values()).map((s) =>
+      s.transport.close().catch(() => {}),
+    )
+    await Promise.all(closers)
+    this.servers.clear()
+  }
+}

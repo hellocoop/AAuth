@@ -1,0 +1,32 @@
+{
+  "id": "aauth-mcp",
+  "name": "AAuth MCP",
+  "description": "Connect to remote MCP servers with AAuth agent authentication",
+  "version": "0.0.1",
+  "entry": "./dist/index.js",
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "agent_url": {
+        "type": "string",
+        "description": "Agent URL for AAuth identity"
+      },
+      "delegate": {
+        "type": "string",
+        "description": "Delegate name (e.g., 'openclaw')"
+      },
+      "token_lifetime": {
+        "type": "number",
+        "description": "Token lifetime in seconds (default: 3600)"
+      },
+      "mcp_servers": {
+        "type": "object",
+        "description": "Map of server names to URLs",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "required": ["agent_url", "mcp_servers"]
+  }
+}

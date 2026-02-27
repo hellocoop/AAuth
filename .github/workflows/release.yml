@@ -1,0 +1,73 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@latest
+      - run: npm ci
+
+      - name: Verify version from release tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          ROOT_VERSION=$(node -p "require('./package.json').version")
+          if [ "$VERSION" != "$ROOT_VERSION" ]; then
+            echo "❌ Release tag v$VERSION does not match package.json version $ROOT_VERSION"
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "Publishing version $VERSION"
+
+      - name: Verify all packages have same version
+        run: |
+          for pkg in mcp-server mcp-agent mcp-openclaw mcp-stdio local-keys; do
+            PKG_VERSION=$(node -p "require('./$pkg/package.json').version")
+            if [ "$PKG_VERSION" != "$VERSION" ]; then
+              echo "❌ $pkg has version $PKG_VERSION, expected $VERSION"
+              exit 1
+            fi
+          done
+          echo "✅ All packages at version $VERSION"
+
+      - name: Build packages (dependency order)
+        run: |
+          for pkg in local-keys mcp-server mcp-agent mcp-openclaw mcp-stdio; do
+            echo "Building $pkg..."
+            (cd $pkg && npm run build)
+          done
+
+      - name: Publish packages with provenance (OIDC Trusted Publishing)
+        run: |
+          for pkg in local-keys mcp-server mcp-agent mcp-openclaw mcp-stdio; do
+            echo "Publishing $pkg..."
+            (cd $pkg && npm publish --provenance --access public) || echo "⚠️  $pkg skipped (may already be at this version)"
+          done

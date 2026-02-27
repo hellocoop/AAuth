@@ -1,0 +1,47 @@
+{
+  "name": "@aauth/local-keys",
+  "version": "0.1.1",
+  "description": "Manage Ed25519 key pairs for local AAuth agent development",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "aauth-local-keys": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "skills"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "aauth",
+    "agent-auth",
+    "ed25519",
+    "keychain"
+  ],
+  "author": "Dick Hardt <dick.hardt@hello.coop>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hellocoop/AAuth",
+    "directory": "local-keys"
+  },
+  "dependencies": {
+    "@napi-rs/keyring": "^1.1.3",
+    "jose": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
