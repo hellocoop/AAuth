@@ -32,11 +32,30 @@ The user wants to set up AAuth agent keys published via GitHub Pages (username.g
    - Add the public JWK (from step 2 output) to the `keys` array.
    - Write the file with `JSON.stringify(jwks, null, 2)`.
 
-5. **Verify the JWKS file.** Ensure it is valid JSON with a `keys` array, and each key has `kty`, `crv`, `x`, `kid`, `use`, `alg`.
+6. **Verify the JWKS file.** Ensure it is valid JSON with a `keys` array, and each key has `kty`, `crv`, `x`, `kid`, `use`, `alg`.
 
-6. **Commit and push.** Commit the changes to the GitHub Pages repo and push so the JWKS is published at `https://username.github.io/.well-known/jwks.json`.
+7. **Create or update `.well-known/aauth-agent.json`.** This file publishes the agent's metadata. Use the GitHub user/org avatar as the agent logo:
+   - Get the GitHub avatar URL by running: `gh api /users/username --jq '.avatar_url'`
+   - If `.well-known/aauth-agent.json` exists, read it and update the fields below.
+   - If it doesn't exist, create it with the following structure:
+   ```json
+   {
+     "id": "https://username.github.io",
+     "name": "Username",
+     "logo_uri": "https://avatars.githubusercontent.com/u/USER_ID?v=4",
+     "jwks_uri": "https://username.github.io/.well-known/jwks.json"
+   }
+   ```
+   - Set `logo_uri` to the avatar URL from `gh api`.
+   - Set `name` to a human-readable agent name — ask the user, or default to the GitHub username/org name.
+   - Optionally add `logo_uri_dark` if the user has a separate dark-mode logo.
+   - Optionally add `tos_uri` and `policy_uri` if the user has terms/policy pages.
 
-7. **Verify publication.** After push, confirm the JWKS is accessible at the public URL. GitHub Pages may take a minute to update.
+8. **Commit and push.** Commit the changes to the GitHub Pages repo and push so the files are published at:
+   - `https://username.github.io/.well-known/jwks.json`
+   - `https://username.github.io/.well-known/aauth-agent.json`
+
+9. **Verify publication.** After push, confirm both files are accessible at the public URLs. GitHub Pages may take a minute to update.
 
 ## Example JWKS file
 
@@ -55,8 +74,20 @@ The user wants to set up AAuth agent keys published via GitHub Pages (username.g
 }
 ```
 
+## Example aauth-agent.json
+
+```json
+{
+  "id": "https://dickhardt.github.io",
+  "name": "Dick Hardt",
+  "logo_uri": "https://avatars.githubusercontent.com/u/322034?v=4",
+  "jwks_uri": "https://dickhardt.github.io/.well-known/jwks.json"
+}
+```
+
 ## Notes
 
 - Each `npx @aauth/local-keys <agent-url>` call generates a new key and sets it as current. Old keys remain in the keychain and should remain in the JWKS for verification of previously issued tokens.
 - The JWKS file contains only public keys — it is safe to commit.
+- The `logo_uri` uses the GitHub avatar, which is the profile picture for the user or org that owns the GitHub Pages site.
 - Run `npx @aauth/local-keys` (no args) to see all stored keys.
