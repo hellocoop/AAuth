@@ -71,11 +71,11 @@ describe('bridgeTransports', () => {
     expect(remote.close).toHaveBeenCalledOnce()
   })
 
-  it('closes local on remote error', async () => {
+  it('does not close local on remote error', async () => {
     await bridgeTransports(local, remote)
 
     remote.onerror!(new Error('remote broke'))
 
-    expect(local.close).toHaveBeenCalledOnce()
+    expect(local.close).not.toHaveBeenCalled()
   })
 })
