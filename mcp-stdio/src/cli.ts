@@ -8,7 +8,7 @@ import open from 'open'
 import { parseArgs } from './args.js'
 import { bridgeTransports } from './proxy.js'
 
-const { serverUrl, agentUrl, delegate, tokenLifetime, purpose } = parseArgs(process.argv)
+const { serverUrl, agentUrl, delegate, tokenLifetime } = parseArgs(process.argv)
 
 const innerFetch = createAAuthFetch({
   getKeyMaterial: () =>
@@ -22,7 +22,6 @@ const innerFetch = createAAuthFetch({
     console.error(`[aauth-stdio] Opening browser for consent: ${url}`)
     open(url)
   },
-  purpose,
 })
 
 // Serialize requests that trigger auth — createAAuthFetch has no internal mutex,
