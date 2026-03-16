@@ -1,6 +1,6 @@
 {
   "name": "@aauth/mcp-openclaw",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "OpenClaw plugin for AAuth-authenticated MCP server connections",
   "type": "module",
   "exports": {
