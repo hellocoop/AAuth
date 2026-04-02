@@ -1,6 +1,6 @@
 {
   "name": "@aauth/local-keys",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Manage Ed25519 key pairs for local AAuth agent development",
   "type": "module",
   "exports": {
