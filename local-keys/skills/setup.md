@@ -6,6 +6,17 @@ when: User wants to create an AAuth agent identity, generate keys, add a key fro
 
 # Skill: Set up AAuth agent identity
 
+## CRITICAL: Run discovery first — do not assume anything
+
+Before giving the user ANY guidance, you MUST run these commands and use the output to determine what is available:
+
+```
+npx @aauth/local-keys discover
+npx @aauth/local-keys show
+```
+
+Do NOT assume which backends are available. Do NOT suggest EdDSA or OS keychain keys unless `discover` shows no hardware backends. The discovery output is the source of truth for what this machine supports.
+
 ## When to use
 
 - First-time setup: the user wants to create an AAuth agent identity with signing keys
@@ -26,6 +37,16 @@ Always prefer hardware keys over software keys. Generate a key on ALL available 
 2. **`secure-enclave`** — macOS Secure Enclave, ES256. Key lives in the Mac's secure hardware.
 3. **`software`** — OS keychain, EdDSA or ES256. Only use if no hardware is available.
 
+## Determining the agent URL
+
+Before generating keys, you need the user's agent URL. This is the HTTPS URL where their agent metadata will be published. Ask the user:
+
+- If they have a domain they want to use, use that.
+- If using GitHub Pages, ask for their GitHub username — the agent URL will be `https://username.github.io`.
+- Run the platform detection commands (see step 4) to discover what hosting options are available and suggest accordingly.
+
+Do NOT pick a hosting platform or agent URL without asking the user.
+
 ## Adding a key to an existing agent
 
 If the user already has an agent identity set up and wants to add a key from a new device (e.g. they got a new YubiKey, or they're on a new Mac with a Secure Enclave):
@@ -45,7 +66,7 @@ Run:
 npx @aauth/local-keys discover
 ```
 
-This returns a JSON array of available backends with their supported algorithms.
+This returns a JSON array of available backends with their supported algorithms. You MUST run this and use the output — do not skip this step.
 
 ### 2. Generate keys on each available hardware backend
 

@@ -4,6 +4,28 @@ Manage AAuth agent signing keys across hardware and software backends. Supports 
 
 Part of the [AAuth](https://github.com/hellocoop/AAuth) project.
 
+## For AI Agents
+
+If you are an AI agent helping a user set up AAuth, **do not guess what is available**. You MUST run the CLI commands to detect the user's environment before giving any guidance:
+
+```bash
+# 1. REQUIRED FIRST STEP: detect available hardware and software backends
+npx @aauth/local-keys discover
+
+# 2. Check current state (existing agents, keys, backends)
+npx @aauth/local-keys show
+
+# 3. Load the setup skill for step-by-step instructions
+npx @aauth/local-keys skill setup
+
+# 4. List available hosting platforms
+npx @aauth/local-keys skill
+```
+
+The `discover` output tells you what key backends are available on this machine. Use that — not assumptions — to guide key generation. Hardware backends (Secure Enclave, YubiKey) are always preferred over software (OS keychain). Do not suggest software keys if hardware is available.
+
+The `skill` commands return structured instructions for the setup flow and each hosting platform. Load and follow these rather than improvising.
+
 ## Install
 
 ```bash
