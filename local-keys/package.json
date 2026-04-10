@@ -1,6 +1,6 @@
 {
   "name": "@aauth/local-keys",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Manage AAuth agent signing keys across hardware and software backends",
   "type": "module",
   "exports": {
@@ -24,7 +24,6 @@
   },
   "keywords": [
     "aauth",
-    "agent-auth",
     "signing",
     "yubikey",
     "secure-enclave",

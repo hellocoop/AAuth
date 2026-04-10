@@ -38,20 +38,23 @@ npm install @aauth/local-keys
 # See what key backends are available
 npx @aauth/local-keys discover
 
-# Generate keys on all available hardware (do this for each hardware backend)
-npx @aauth/local-keys generate --backend yubikey-piv --agent https://you.github.io
-npx @aauth/local-keys generate --backend secure-enclave --agent https://you.github.io
+# Generate keys on available hardware
+npx @aauth/local-keys generate \
+  --backend yubikey-piv --agent https://you.github.io
+npx @aauth/local-keys generate \
+  --backend secure-enclave --agent https://you.github.io
 
 # Set up hosting and person server
 npx @aauth/local-keys add-agent https://you.github.io \
   --person-server https://hello.coop \
   --hosting github-pages --repo you/you.github.io
 
-# Publish your keys (see skills for platform-specific instructions)
+# Publish keys (platform-specific instructions)
 npx @aauth/local-keys skill github-pages
 
 # Sign an agent token
-npx @aauth/local-keys sign-token --agent https://you.github.io --delegate claude
+npx @aauth/local-keys sign-token \
+  --agent https://you.github.io --delegate claude
 ```
 
 ## Key Backends
@@ -149,24 +152,24 @@ setHosting('https://you.github.io', {
 ## CLI
 
 ```
-npx @aauth/local-keys discover                  # list available backends (JSON)
-npx @aauth/local-keys generate [options]         # generate key, output public JWK (JSON)
-  --backend <name>                                #   yubikey-piv, secure-enclave, software
-  --algorithm <alg>                               #   ES256 (default for hardware), EdDSA, RS256
-  --agent <url>                                   #   associate with agent URL
-npx @aauth/local-keys sign-token [options]       # sign agent token (JSON)
-  --agent <url>                                   #   agent URL (optional if configured)
-  --delegate <name>                               #   delegate name (required)
-  --lifetime <seconds>                            #   token lifetime (default: 3600)
-npx @aauth/local-keys add-agent <url> [options]  # register agent URL
-  --person-server <url>                           #   person server URL
-  --hosting <platform>                            #   github-pages, cloudflare-pages, netlify, s3, custom
-  --repo <repo>                                   #   platform-specific repo/bucket identifier
-npx @aauth/local-keys public-key [--agent <url>] # output public key(s) (JSON)
-npx @aauth/local-keys skill                      # list available skills (JSON)
-npx @aauth/local-keys skill <name>               # show full skill instructions
-npx @aauth/local-keys config                     # dump ~/.aauth/config.json
-npx @aauth/local-keys show                       # human-readable status
+npx @aauth/local-keys discover          # list backends
+npx @aauth/local-keys generate [opts]   # generate key
+  --backend <name>    # yubikey-piv, secure-enclave, software
+  --algorithm <alg>   # ES256 (hw default), EdDSA, RS256
+  --agent <url>       # associate with agent URL
+npx @aauth/local-keys sign-token [opts] # sign token
+  --agent <url>       # agent URL (optional if configured)
+  --delegate <name>   # delegate name (required)
+  --lifetime <sec>    # token lifetime (default: 3600)
+npx @aauth/local-keys add-agent <url>   # register agent
+  --person-server <url>
+  --hosting <platform>  # github-pages, cloudflare-pages, etc.
+  --repo <repo>
+npx @aauth/local-keys public-key [--agent <url>]
+npx @aauth/local-keys skill             # list skills
+npx @aauth/local-keys skill <name>      # show skill
+npx @aauth/local-keys config            # dump config
+npx @aauth/local-keys show              # status overview
 ```
 
 ## Config File

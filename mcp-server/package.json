@@ -1,6 +1,6 @@
 {
   "name": "@aauth/mcp-server",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "AAuth server-side building blocks: challenge headers, interaction management, resource tokens",
   "type": "module",
   "exports": {
@@ -18,7 +18,6 @@
   },
   "keywords": [
     "aauth",
-    "agent-auth",
     "mcp",
     "server"
   ],
