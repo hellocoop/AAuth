@@ -40,6 +40,8 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          registry-url: https://registry.npmjs.org
+      - run: npm config delete //registry.npmjs.org/:_authToken || true
       - run: npm ci
 
       - name: Verify version from release tag
