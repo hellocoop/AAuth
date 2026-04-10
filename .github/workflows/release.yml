@@ -41,8 +41,9 @@ jobs:
           node-version: 22
           cache: npm
           registry-url: https://registry.npmjs.org
-      - run: npm config delete //registry.npmjs.org/:_authToken || true
+      - run: npm install -g npm@latest
       - run: npm ci
+      - run: npm run build --workspaces --if-present
 
       - name: Verify version from release tag
         run: |
@@ -73,14 +74,7 @@ jobs:
           done
           echo "✅ All packages at version $VERSION"
 
-      - name: Build packages (dependency order)
-        run: |
-          for pkg in local-keys mcp-server mcp-agent mcp-openclaw mcp-stdio; do
-            echo "Building $pkg..."
-            (cd $pkg && npm run build)
-          done
-
-      - name: Publish packages with provenance (OIDC Trusted Publishing)
+      - name: Publish packages with provenance
         run: |
           for pkg in local-keys mcp-server mcp-agent mcp-openclaw mcp-stdio; do
             published=$(npm view "@aauth/$pkg" version 2>/dev/null || echo "0.0.0")

@@ -164,7 +164,7 @@ jobs:
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
-      - run: npm config delete //registry.npmjs.org/:_authToken || true
+      - run: npm install -g npm@latest
 
       - uses: actions/download-artifact@v4
         with:
