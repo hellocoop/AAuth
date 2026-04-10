@@ -12,6 +12,9 @@ on:
         description: 'Publish platform packages to npm'
         type: boolean
         default: false
+    secrets:
+      NPM_TOKEN:
+        required: false
 
 permissions:
   contents: read
@@ -164,8 +167,6 @@ jobs:
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
-      - run: npm install -g npm@10
-
       - uses: actions/download-artifact@v4
         with:
           name: hardware-keys-darwin-arm64
@@ -184,6 +185,8 @@ jobs:
           path: hardware-keys/npm/win32-x64-msvc/
 
       - name: Publish platform packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           VERSION=$(node -p "require('./hardware-keys/package.json').version")
           for pkg in darwin-arm64 darwin-x64 linux-x64-gnu win32-x64-msvc; do
@@ -197,6 +200,8 @@ jobs:
           done
 
       - name: Publish main hardware-keys package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           VERSION=$(node -p "require('./hardware-keys/package.json').version")
           published=$(npm view "@aauth/hardware-keys" version 2>/dev/null || echo "0.0.0")

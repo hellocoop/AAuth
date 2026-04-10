@@ -24,6 +24,8 @@ jobs:
     uses: ./.github/workflows/hardware-keys.yml
     with:
       publish: true
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     permissions:
       contents: read
       id-token: write
@@ -41,7 +43,6 @@ jobs:
           node-version: 22
           cache: npm
           registry-url: https://registry.npmjs.org
-      - run: npm install -g npm@10
       - run: npm ci
       - run: npm run build --workspaces --if-present
 
@@ -75,6 +76,8 @@ jobs:
           echo "✅ All packages at version $VERSION"
 
       - name: Publish packages with provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           for pkg in local-keys mcp-server mcp-agent mcp-openclaw mcp-stdio; do
             published=$(npm view "@aauth/$pkg" version 2>/dev/null || echo "0.0.0")

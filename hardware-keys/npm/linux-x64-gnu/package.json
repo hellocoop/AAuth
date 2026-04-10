@@ -1,6 +1,6 @@
 {
   "name": "@aauth/hardware-keys-linux-x64-gnu",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "os": ["linux"],
   "cpu": ["x64"],
   "libc": ["glibc"],
