@@ -39,8 +39,7 @@ jobs:
       - name: List build output
         run: ls -la hardware-keys/*.node
       - name: Smoke test
-        working-directory: hardware-keys
-        run: node -e "const m = require('./index.js'); console.log('discover:', JSON.stringify(m.discover()))"
+        run: node -e "const m = require('./hardware-keys/hardware-keys.darwin-arm64.node'); console.log('discover:', JSON.stringify(m.discover()))"
       - name: Stage platform package
         run: |
           cp hardware-keys/hardware-keys.darwin-arm64.node hardware-keys/npm/darwin-arm64/index.darwin-arm64.node
@@ -107,8 +106,7 @@ jobs:
       - name: List build output
         run: ls -la hardware-keys/*.node
       - name: Smoke test
-        working-directory: hardware-keys
-        run: node -e "const m = require('./index.js'); console.log('discover:', JSON.stringify(m.discover()))"
+        run: node -e "const m = require('./hardware-keys/hardware-keys.linux-x64-gnu.node'); console.log('discover:', JSON.stringify(m.discover()))"
       - name: Stage platform package
         run: |
           cp hardware-keys/hardware-keys.linux-x64-gnu.node hardware-keys/npm/linux-x64-gnu/index.linux-x64-gnu.node
@@ -138,8 +136,7 @@ jobs:
         shell: bash
         run: ls -la hardware-keys/*.node
       - name: Smoke test
-        working-directory: hardware-keys
-        run: node -e "const m = require('./index.js'); console.log('discover:', JSON.stringify(m.discover()))"
+        run: node -e "const m = require('./hardware-keys/hardware-keys.win32-x64-msvc.node'); console.log('discover:', JSON.stringify(m.discover()))"
       - name: Stage platform package
         shell: bash
         run: |
