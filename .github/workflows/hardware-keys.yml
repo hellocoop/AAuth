@@ -36,11 +36,14 @@ jobs:
         run: napi build --platform --release --target aarch64-apple-darwin
       - name: Build se-helper
         run: bash local-keys/se-helper/build.sh
+      - name: List build output
+        run: ls -la hardware-keys/*.node
       - name: Smoke test
-        run: node -e "const m = require('./hardware-keys/index.darwin-arm64.node'); console.log('discover:', JSON.stringify(m.discover()))"
+        working-directory: hardware-keys
+        run: node -e "const m = require('./index.js'); console.log('discover:', JSON.stringify(m.discover()))"
       - name: Stage platform package
         run: |
-          cp hardware-keys/index.darwin-arm64.node hardware-keys/npm/darwin-arm64/
+          cp hardware-keys/hardware-keys.darwin-arm64.node hardware-keys/npm/darwin-arm64/index.darwin-arm64.node
           cp local-keys/bin/se-helper hardware-keys/npm/darwin-arm64/se-helper
       - uses: actions/upload-artifact@v4
         with:
@@ -49,7 +52,7 @@ jobs:
           if-no-files-found: error
 
   build-darwin-x64:
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -64,13 +67,16 @@ jobs:
       - name: Build native module
         working-directory: hardware-keys
         run: napi build --platform --release --target x86_64-apple-darwin
-      - name: Build se-helper
-        run: bash local-keys/se-helper/build.sh
-      - name: Smoke test
-        run: node -e "const m = require('./hardware-keys/index.darwin-x64.node'); console.log('discover:', JSON.stringify(m.discover()))"
+      - name: Build se-helper for x86_64
+        run: |
+          mkdir -p local-keys/bin
+          swiftc -O -target x86_64-apple-macos11 -o local-keys/bin/se-helper local-keys/se-helper/main.swift
+          codesign --force --sign - local-keys/bin/se-helper
+      - name: List build output
+        run: ls -la hardware-keys/*.node
       - name: Stage platform package
         run: |
-          cp hardware-keys/index.darwin-x64.node hardware-keys/npm/darwin-x64/
+          cp hardware-keys/hardware-keys.darwin-x64.node hardware-keys/npm/darwin-x64/index.darwin-x64.node
           cp local-keys/bin/se-helper hardware-keys/npm/darwin-x64/se-helper
       - uses: actions/upload-artifact@v4
         with:
@@ -98,11 +104,14 @@ jobs:
       - name: Build native module
         working-directory: hardware-keys
         run: napi build --platform --release --target x86_64-unknown-linux-gnu
+      - name: List build output
+        run: ls -la hardware-keys/*.node
       - name: Smoke test
-        run: node -e "const m = require('./hardware-keys/index.linux-x64-gnu.node'); console.log('discover:', JSON.stringify(m.discover()))"
+        working-directory: hardware-keys
+        run: node -e "const m = require('./index.js'); console.log('discover:', JSON.stringify(m.discover()))"
       - name: Stage platform package
         run: |
-          cp hardware-keys/index.linux-x64-gnu.node hardware-keys/npm/linux-x64-gnu/
+          cp hardware-keys/hardware-keys.linux-x64-gnu.node hardware-keys/npm/linux-x64-gnu/index.linux-x64-gnu.node
       - uses: actions/upload-artifact@v4
         with:
           name: hardware-keys-linux-x64-gnu
@@ -125,12 +134,16 @@ jobs:
       - name: Build native module
         working-directory: hardware-keys
         run: napi build --platform --release --target x86_64-pc-windows-msvc
+      - name: List build output
+        shell: bash
+        run: ls -la hardware-keys/*.node
       - name: Smoke test
-        run: node -e "const m = require('./hardware-keys/index.win32-x64-msvc.node'); console.log('discover:', JSON.stringify(m.discover()))"
+        working-directory: hardware-keys
+        run: node -e "const m = require('./index.js'); console.log('discover:', JSON.stringify(m.discover()))"
       - name: Stage platform package
         shell: bash
         run: |
-          cp hardware-keys/index.win32-x64-msvc.node hardware-keys/npm/win32-x64-msvc/
+          cp hardware-keys/hardware-keys.win32-x64-msvc.node hardware-keys/npm/win32-x64-msvc/index.win32-x64-msvc.node
       - uses: actions/upload-artifact@v4
         with:
           name: hardware-keys-win32-x64-msvc
