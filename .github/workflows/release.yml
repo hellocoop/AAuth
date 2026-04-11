@@ -44,7 +44,12 @@ jobs:
           cache: npm
           registry-url: https://registry.npmjs.org
       - run: npm ci
-      - run: npm run build --workspaces --if-present
+      - name: Build packages (dependency order)
+        run: |
+          for pkg in local-keys mcp-server mcp-agent mcp-openclaw mcp-stdio; do
+            echo "Building $pkg..."
+            (cd $pkg && npm run build)
+          done
 
       - name: Verify version from release tag
         run: |
