@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
-import { dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { generateKey, toPublicJwk } from './keygen.js'
-import { listSkills, getSkill } from './skills.js'
-import { readKeychain, writeKeychain, listAgentUrls } from './keychain.js'
-import { discoverBackends, getBackend } from './backends/index.js'
 import {
+  generateKey,
+  generateKid,
+  toPublicJwk,
+  readKeychain,
+  writeKeychain,
+  listAgentUrls,
+  discoverBackends,
+  getBackend,
   readConfig,
   addKeyToAgent,
   setPersonServer,
@@ -14,12 +16,13 @@ import {
   setAgentConfig,
   getAgentConfig,
   listConfiguredAgents,
-} from './config.js'
-import { signAgentToken } from './agent-token.js'
-import { resolveKey, checkKeyAvailability } from './resolve-key.js'
-import type { KeyAlgorithm, KeyBackend, AAuthPublicJwk } from './types.js'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
+  signAgentToken,
+  resolveKey,
+  validateUrl,
+  ensureAgentUrls,
+} from '@aauth/local-keys'
+import type { KeyAlgorithm, KeyBackend, AAuthPublicJwk } from '@aauth/local-keys'
+import { listSkills, getSkill } from './skills.js'
 
 function parseArgs(args: string[]) {
   const flags: Record<string, string> = {}
@@ -35,38 +38,6 @@ function parseArgs(args: string[]) {
     }
   }
   return { flags, positional }
-}
-
-function validateUrl(s: string): string | null {
-  let url: URL
-  try {
-    url = new URL(s)
-  } catch {
-    return 'not a valid URL'
-  }
-  if (url.protocol !== 'https:') return 'must be https://'
-  if (url.port) return 'must not include a port'
-  if (url.pathname.endsWith('/') && url.pathname !== '/')
-    return 'must not have a trailing slash'
-  if (!url.hostname.includes('.')) return 'hostname must have a domain'
-  return null
-}
-
-function generateKid(): string {
-  const date = new Date().toISOString().slice(0, 10)
-  const hex = Math.floor(Math.random() * 0xfff).toString(16).padStart(3, '0')
-  return `${date}_${hex}`
-}
-
-function ensureAgentUrls(agentUrl: string) {
-  const existing = getAgentConfig(agentUrl)
-  if (!existing?.agentServerUrl) {
-    setAgentConfig(agentUrl, {
-      ...existing || { keys: {} },
-      agentServerUrl: `${agentUrl.replace(/\/$/, '')}/.well-known/aauth-agent.json`,
-      jwksUri: existing?.jwksUri || `${agentUrl.replace(/\/$/, '')}/.well-known/jwks.json`,
-    })
-  }
 }
 
 // === Commands ===
@@ -157,7 +128,6 @@ async function cmdSignToken(flags: Record<string, string>) {
 async function cmdPublicKey(flags: Record<string, string>) {
   const agentUrl = flags.agent
   if (!agentUrl) {
-    // Try to list all known public keys from all backends
     const backends = discoverBackends()
     const allKeys: Array<{ backend: string; keyId: string; publicJwk: unknown }> = []
     for (const info of backends) {
@@ -289,7 +259,7 @@ function cmdSkill(name?: string) {
 }
 
 function cmdHelp() {
-  console.log(`Usage: npx @aauth/local-keys <command> [options]
+  console.log(`Usage: npx @aauth/bootstrap <command> [options]
 
 Commands:
   discover                 List available key backends (JSON)
@@ -321,12 +291,12 @@ Add-agent options:
   --algorithm <alg>        Key algorithm
 
 Examples:
-  npx @aauth/local-keys discover
-  npx @aauth/local-keys generate --backend yubikey-piv
-  npx @aauth/local-keys generate --backend secure-enclave --agent https://me.github.io
-  npx @aauth/local-keys sign-token --agent https://me.github.io --delegate claude
-  npx @aauth/local-keys add-agent https://me.github.io --person-server https://hello.coop
-  npx @aauth/local-keys public-key --agent https://me.github.io`)
+  npx @aauth/bootstrap discover
+  npx @aauth/bootstrap generate --backend yubikey-piv
+  npx @aauth/bootstrap generate --backend secure-enclave --agent https://me.github.io
+  npx @aauth/bootstrap sign-token --agent https://me.github.io --delegate claude
+  npx @aauth/bootstrap add-agent https://me.github.io --person-server https://hello.coop
+  npx @aauth/bootstrap public-key --agent https://me.github.io`)
 }
 
 async function run() {

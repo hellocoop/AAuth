@@ -1,6 +1,6 @@
 {
   "name": "@aauth/mcp-stdio",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Stdio-to-HTTP proxy for MCP with AAuth signatures",
   "type": "module",
   "exports": {
@@ -32,7 +32,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/hellocoop/AAuth",
+    "url": "https://github.com/AAuth-dev/packages-js",
     "directory": "mcp-stdio"
   },
   "dependencies": {

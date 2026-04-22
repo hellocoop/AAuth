@@ -1,11 +1,11 @@
 {
   "name": "@aauth/aauth",
   "private": true,
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "AAuth (Agent Auth) utilities and packages",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hellocoop/AAuth"
+    "url": "https://github.com/AAuth-dev/packages-js"
   },
   "keywords": [
     "aauth",
@@ -22,6 +22,7 @@
   },
   "workspaces": [
     "local-keys",
+    "bootstrap",
     "hardware-keys",
     "mcp-agent",
     "mcp-server",

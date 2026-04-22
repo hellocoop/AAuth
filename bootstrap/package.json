@@ -1,16 +1,14 @@
 {
-  "name": "@aauth/mcp-agent",
+  "name": "@aauth/bootstrap",
   "version": "0.7.0",
-  "description": "Authenticated MCP transport with HTTP Signatures for AAuth agents",
+  "description": "CLI for bootstrapping AAuth agent keys and configuration",
   "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
+  "bin": {
+    "aauth-bootstrap": "./dist/cli.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "skills"
   ],
   "scripts": {
     "build": "tsc",
@@ -18,8 +16,8 @@
   },
   "keywords": [
     "aauth",
-    "mcp",
-    "http-signatures"
+    "bootstrap",
+    "cli"
   ],
   "author": "Dick Hardt <dick.hardt@hello.coop>",
   "license": "MIT",
@@ -29,13 +27,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/AAuth-dev/packages-js",
-    "directory": "mcp-agent"
+    "directory": "bootstrap"
   },
   "dependencies": {
-    "@hellocoop/httpsig": "^1.1.3"
-  },
-  "devDependencies": {
-    "@types/node": "^20.0.0",
-    "typescript": "^5.0.0"
+    "@aauth/local-keys": "^0.6.0"
   }
 }

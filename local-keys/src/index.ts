@@ -1,5 +1,5 @@
 export { readKeychain, writeKeychain, listAgentUrls } from './keychain.js'
-export { generateKey, toPublicJwk } from './keygen.js'
+export { generateKey, generateKid, toPublicJwk } from './keygen.js'
 export { signAgentToken } from './agent-token.js'
 export { createAgentToken } from './delegate-key.js'
 export { discoverBackends, getBackend } from './backends/index.js'
@@ -11,10 +11,11 @@ export {
   setPersonServer,
   setHosting,
   listConfiguredAgents,
+  validateUrl,
+  ensureAgentUrls,
 } from './config.js'
 export { resolveKey, checkKeyAvailability } from './resolve-key.js'
 export { machineLabel, yubikeyLabel } from './device-label.js'
-export { listSkills, getSkill, listPlatforms } from './skills.js'
 export type {
   KeychainData,
   GeneratedKeyPair,
@@ -35,4 +36,3 @@ export type {
   AAuthJwkMetadata,
   ResolvedKey,
 } from './types.js'
-export type { SkillSummary, Skill, PlatformSummary } from './skills.js'

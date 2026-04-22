@@ -1,2 +1,2 @@
 // AAuth - Agent Auth utilities
-// https://github.com/hellocoop/AAuth
+// https://github.com/AAuth-dev/packages-js

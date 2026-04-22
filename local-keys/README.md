@@ -2,7 +2,7 @@
 
 Manage AAuth agent signing keys across hardware and software backends. Supports YubiKey PIV, macOS Secure Enclave, and OS keychain — with automatic key resolution that prefers hardware keys and tolerates devices being unavailable.
 
-Part of the [AAuth](https://github.com/hellocoop/AAuth) project.
+Part of the [AAuth](https://github.com/AAuth-dev/packages-js) project.
 
 ## For AI Agents
 

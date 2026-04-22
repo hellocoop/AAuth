@@ -1,6 +1,6 @@
 {
   "name": "@aauth/hardware-keys-linux-x64-gnu",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "os": ["linux"],
   "cpu": ["x64"],
   "libc": ["glibc"],
@@ -10,6 +10,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hellocoop/AAuth"
+    "url": "https://github.com/AAuth-dev/packages-js"
   }
 }

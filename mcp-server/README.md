@@ -2,7 +2,7 @@
 
 Server-side AAuth for MCP. Verifies signed requests, validates agent and auth tokens, builds AAuth challenge headers, creates resource tokens, and manages 202 interaction flows.
 
-See the [AAuth repo](https://github.com/hellocoop/AAuth) for protocol overview.
+See the [AAuth repo](https://github.com/AAuth-dev/packages-js) for protocol overview.
 
 ## Install
 

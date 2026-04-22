@@ -2,7 +2,7 @@ import { generateKeyPair, exportJWK } from 'jose'
 import type { JWK } from 'jose'
 import type { GeneratedKeyPair } from './types.js'
 
-function generateKid(): string {
+export function generateKid(): string {
   const now = new Date()
   const date = now.toISOString().slice(0, 10) // YYYY-MM-DD
   const hex = Math.floor(Math.random() * 0xfff)

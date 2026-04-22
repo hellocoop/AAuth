@@ -1,5 +1,5 @@
-import { readFileSync, readdirSync, existsSync } from 'node:fs'
-import { join, basename, dirname } from 'node:path'
+import { readFileSync, readdirSync } from 'node:fs'
+import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -56,9 +56,6 @@ function readSkillFiles(dir: string): Array<{ file: string; content: string }> {
   }
 }
 
-/**
- * List all skills (top-level + platforms).
- */
 export function listSkills(): SkillSummary[] {
   const skills: SkillSummary[] = []
 
@@ -87,11 +84,7 @@ export function listSkills(): SkillSummary[] {
   return skills
 }
 
-/**
- * Get a skill by name (searches top-level and platforms).
- */
 export function getSkill(name: string): Skill | null {
-  // Try top-level first
   for (const dir of [skillsDir, platformsDir]) {
     const filePath = join(dir, `${name}.md`)
     try {
@@ -111,10 +104,6 @@ export function getSkill(name: string): Skill | null {
   return null
 }
 
-/**
- * List available hosting platforms with their discovery metadata.
- * An agent uses this to check which platforms the user has available.
- */
 export function listPlatforms(): PlatformSummary[] {
   const platforms: PlatformSummary[] = []
 

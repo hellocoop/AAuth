@@ -69,3 +69,29 @@ export function listConfiguredAgents(): string[] {
   const config = readConfig()
   return Object.keys(config.agents)
 }
+
+export function validateUrl(s: string): string | null {
+  let url: URL
+  try {
+    url = new URL(s)
+  } catch {
+    return 'not a valid URL'
+  }
+  if (url.protocol !== 'https:') return 'must be https://'
+  if (url.port) return 'must not include a port'
+  if (url.pathname.endsWith('/') && url.pathname !== '/')
+    return 'must not have a trailing slash'
+  if (!url.hostname.includes('.')) return 'hostname must have a domain'
+  return null
+}
+
+export function ensureAgentUrls(agentUrl: string): void {
+  const existing = getAgentConfig(agentUrl)
+  if (!existing?.agentServerUrl) {
+    setAgentConfig(agentUrl, {
+      ...existing || { keys: {} },
+      agentServerUrl: `${agentUrl.replace(/\/$/, '')}/.well-known/aauth-agent.json`,
+      jwksUri: existing?.jwksUri || `${agentUrl.replace(/\/$/, '')}/.well-known/jwks.json`,
+    })
+  }
+}
