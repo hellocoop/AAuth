@@ -1,0 +1,35 @@
+{
+  "name": "@aauth/fetch",
+  "version": "0.7.1",
+  "description": "CLI for making AAuth-authenticated HTTP requests",
+  "type": "module",
+  "bin": {
+    "aauth-fetch": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "skills"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@aauth/local-keys": "^0.6.0",
+    "@aauth/mcp-agent": "^0.6.0",
+    "open": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aauth-dev/packages-js",
+    "directory": "fetch"
+  },
+  "license": "MIT"
+}
